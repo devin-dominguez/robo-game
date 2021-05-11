@@ -1,15 +1,16 @@
 import Rooms from './data/rooms';
+import Sprites from './data/sprites';
 
 export const Player = {
   moveState: 'IDLE',
 
   position: {
-    x: 20,
-    y: 90
+    x: 40,
+    y: 40
   },
 
-  width: 12,
-  height: 24,
+  width: 16,
+  height: 32,
   footHeight: 4,
 
   moveTarget: {
@@ -20,7 +21,9 @@ export const Player = {
   moveRate: 2,
 
   direction: 'RIGHT',
+  sprite: Sprites.PLAYER_WALK_RIGHT
 };
+console.log(Player)
 
 export const Viewport = {
   scale: 7,

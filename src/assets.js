@@ -2,7 +2,10 @@ import { loadImage } from './utils';
 
 const PATHS = {
   room: 'background.png',
-  player: 'player.png'
+  player_walk_left: 'player/walk_left.png',
+  player_walk_right: 'player/walk_right.png',
+  player_walk_back: 'player/walk_back.png',
+  player_walk_front: 'player/walk_front.png',
 };
 
 const imagesPromise = Object.keys(PATHS).map(key => {

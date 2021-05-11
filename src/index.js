@@ -44,6 +44,7 @@ const update = () => {
   Logger.addLine(`targetY: ${Player.state.moveTarget.y}`);
   Logger.addLine(`state: ${Player.state.moveState}`);
   Logger.addLine(`direction: ${Player.state.direction}`);
+  Logger.addLine(`angle: ${Player.state.angle}`);
 };
 
 const draw  = () => {

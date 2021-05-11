@@ -2,6 +2,9 @@ import Assets from './assets';
 import Viewport from './viewport';
 import { Player as state} from './state';
 
+import Sprite from './sprite';
+import Sprites from './data/sprites';
+
 const hasReachedTarget = () =>
   (state.position.x === state.moveTarget.x) &&
     (state.position.y === state.moveTarget.y);
@@ -32,20 +35,31 @@ const executeMove = () => {
     if (y < tY) {
       state.position.y += moveRate;
     } else {
-      state.position.y -= moveRate;
+      state.position.y -= moveRate
     }
   } else {
     state.position.y = tY;
+  }
+
+  const angle = Math.atan2((y - tY) , (x - tX));
+  const PI = Math.PI;
+  state.angle = angle;
+  if (angle >=  Math.PI / 4 && angle <= 3 * Math.PI / 4) {
+    state.direction = 'BACK';
+  }  else if (angle <=  -Math.PI / 4 && angle >= -3 * Math.PI / 4) {
+    state.direction = 'FRONT';
   }
 };
 
 
 const update = () => {
+
   switch (state.moveState) {
     case 'IDLE':
       break;
     case 'MOVING':
       executeMove();
+      Sprite.update(state.sprite, 0, 0);
       break;
     default:
       break;
@@ -60,9 +74,38 @@ const draw = () => {
 
   ctx.save();
 
-  ctx.fillStyle = 'red';
   ctx.translate(Math.floor(x), Math.floor(y));
-  ctx.fillRect(-width / 2, footHeight, width, -height);
+
+  //ctx.fillStyle = 'red';
+  //ctx.fillRect(-width / 2, footHeight, width, -height);
+
+  if (state.moveState === 'MOVING') {
+    switch (state.direction) {
+      case 'LEFT':
+        state.sprite = Sprites.PLAYER_WALK_LEFT;
+        break;
+      case 'RIGHT':
+        state.sprite = Sprites.PLAYER_WALK_RIGHT;
+        break;
+      case 'FRONT':
+        state.sprite = Sprites.PLAYER_WALK_FRONT;
+        break;
+      case 'BACK':
+        state.sprite = Sprites.PLAYER_WALK_BACK;
+        break;
+      default:
+        break;
+    }
+  } else {
+    state.sprite = Sprites.PLAYER_WALK_FRONT;
+    state.sprite.frame = 0;
+  }
+
+  Sprite.draw(state.sprite, -width , -height - footHeight);
+  //ctx.save();
+  //ctx.rotate(state.angle)
+  //ctx.fillRect(0, 0, 2, 50);
+  //ctx.restore();
   ctx.restore();
 };
 
