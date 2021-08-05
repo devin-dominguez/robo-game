@@ -1,29 +1,21 @@
-import Assets from './assets';
-import Rooms from './data/rooms';
-import Viewport from './viewport';
-import { Room as state } from './state';
-import { constrain } from './utils';
+import Prop from './prop';
+import { loadData } from './utils';
+import { getAsset } from './data/assets';
+import Screen from './screen';
 
+export default class Room {
+  constructor(params) {
+    Object.assign(this, {
+      props: {},
+      ...params
+    });
 
-Assets.loaded.then(() => {
-  const { images } = Assets;
-  Object.keys(Rooms).forEach(key => {
-    const room = Rooms[key];
-    const image = images[room.background];
-    room.image = image;
-    room.width = image.width;
-    room.height = image.height;
-  });
-});
+    this.props = loadData(this.props, Prop, { room: this });
+  }
 
-const draw = () => {
-  const { image } = state.current;
-  const { ctx } = Viewport;
+  update() {}
 
-  ctx.drawImage(image, 0, 0);
-};
-
-export default {
-  state,
-  draw
+  draw() {
+    Screen.ctx.drawImage(getAsset(this.background), 0, 0);
+  }
 };

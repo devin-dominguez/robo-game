@@ -1,8 +1,16 @@
 const path = require('path');
+const generateAssetManifest = require('./generate_asset_manifest');
 
 module.exports = {
   mode: 'development',
   entry: path.resolve(__dirname, './src/index.js'),
+  plugins: [
+    {
+      apply: (compiler) => {
+        compiler.hooks.compile.tap('GenerateAssetManifest', () => generateAssetManifest())
+      }
+    }
+  ],
   module: {
     rules: [
       {
@@ -23,5 +31,6 @@ module.exports = {
   devtool: 'inline-source-map',
   devServer: {
     contentBase: path.resolve(__dirname, './dist'),
+    host: '0.0.0.0'
   },
 };

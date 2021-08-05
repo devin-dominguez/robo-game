@@ -1,39 +1,28 @@
-import Assets from './assets';
-import Sprites from './data/sprites';
-import Viewport from './viewport';
+import Screen from './screen';
+import { getAsset } from './data/assets';
 
-Assets.loaded.then(() => {
-  const { images } = Assets;
-  Object.keys(Sprites).forEach(key => {
-    const sprite = Sprites[key];
-    const image = images[sprite.image];
-    sprite.image = image;
-    sprite.frame = 0;
-    sprite.animating = true;
-    sprite.elpasedFrames = 0;
-  })
-});
-
-
-const draw = (sprite, x, y) => {
-  const { ctx } = Viewport;
-  const { width, height, frameCount, frame, image } = sprite;
-  ctx.drawImage(image, frame * width, 0, width, height, x, y, width, height);
-};
-
-const update = sprite => {
-  const { frameRate, frameCount } = sprite;
-  if (sprite.elpasedFrames >= frameRate) {
-    sprite.elpasedFrames = 0;
-    sprite.frame += 1;
-    sprite.frame %= frameCount;
-  } else {
-    sprite.elpasedFrames++;
+export default class Sprite {
+  constructor(params) {
+    Object.assign(this, {
+      offsetX: 0,
+      offsetY: 0,
+      originX: 0,
+      originY: 0
+    }, params);
   }
-};
 
+  draw(x, y, frame = 0) {
+    Screen.ctx.drawImage(
+      getAsset(this.image),
+      this.offsetX + this.width * frame,
+      0,
+      this.width,
+      this.height,
+      x - this.originX,
+      y - this.originY,
+      this.width,
+      this.height
+    );
 
-export default {
-  update,
-  draw
+  }
 };

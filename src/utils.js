@@ -1,10 +1,14 @@
-export const loadImage = url => new Promise((resolve, reject) => {
-  const image = new Image();
-  image.src = url;
-  image.addEventListener('load', e => {
-    resolve(image);
-  });
-});
+export const loadData = (data, itemClass, extraData = {}) => Object.keys(data)
+  .reduce((collection, name) => {
+    if (!collection.all) {
+      collection.all = [];
+    }
 
-export const constrain = (min, max, value) => Math.min(max, Math.max(min, value));
+    const params = data[name];
+    const item = new itemClass({ name, ...params, ...extraData });
 
+    collection[name] = item;
+    collection.all.push(item);
+
+    return collection;
+  }, {});
